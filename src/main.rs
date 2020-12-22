@@ -50,6 +50,7 @@ macro_rules! time {
 mod day1;
 mod day2;
 mod day3;
+mod day4;
 mod util;
 
 fn main() -> Result<()> {
@@ -64,6 +65,7 @@ fn main() -> Result<()> {
             "day1" => day1::run(rest.as_slice()),
             "day2" => day2::run(rest.as_slice()),
             "day3" => day3::run(rest.as_slice()),
+            "day4" => day4::run(rest.as_slice()),
             _ => Err(anyhow!("unrecognized command: '{}'", command)),
         }
     })
