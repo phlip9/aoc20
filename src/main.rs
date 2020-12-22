@@ -52,6 +52,7 @@ mod day2;
 mod day3;
 mod day4;
 mod day5;
+mod day6;
 mod util;
 
 fn main() -> Result<()> {
@@ -68,6 +69,7 @@ fn main() -> Result<()> {
             "day3" => day3::run(rest.as_slice()),
             "day4" => day4::run(rest.as_slice()),
             "day5" => day5::run(rest.as_slice()),
+            "day6" => day6::run(rest.as_slice()),
             _ => Err(anyhow!("unrecognized command: '{}'", command)),
         }
     })

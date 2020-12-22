@@ -1,5 +1,5 @@
 use anyhow::{anyhow, Context, Result};
-use std::{fmt, fs, slice};
+use std::{fmt, fs};
 
 const POSITION_LEN: usize = 10;
 const COL_LEN: usize = 3;
