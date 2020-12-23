@@ -53,6 +53,7 @@ mod day3;
 mod day4;
 mod day5;
 mod day6;
+mod day7;
 mod util;
 
 fn main() -> Result<()> {
@@ -60,16 +61,18 @@ fn main() -> Result<()> {
     println!("{:?}", args);
 
     let (command, rest) = args.split_first().expect("no command");
-    let rest = rest.into_iter().map(String::as_str).collect::<Vec<_>>();
+    let rest_vec = rest.into_iter().map(String::as_str).collect::<Vec<_>>();
+    let rest = rest_vec.as_slice();
 
     time!("command", {
         match command.as_str() {
-            "day1" => day1::run(rest.as_slice()),
-            "day2" => day2::run(rest.as_slice()),
-            "day3" => day3::run(rest.as_slice()),
-            "day4" => day4::run(rest.as_slice()),
-            "day5" => day5::run(rest.as_slice()),
-            "day6" => day6::run(rest.as_slice()),
+            "day1" => day1::run(rest),
+            "day2" => day2::run(rest),
+            "day3" => day3::run(rest),
+            "day4" => day4::run(rest),
+            "day5" => day5::run(rest),
+            "day6" => day6::run(rest),
+            "day7" => day7::run(rest),
             _ => Err(anyhow!("unrecognized command: '{}'", command)),
         }
     })

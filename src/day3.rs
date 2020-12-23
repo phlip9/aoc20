@@ -3,8 +3,6 @@ use anyhow::Result;
 use std::{fmt, iter::Iterator, str};
 
 const WIDTH: usize = 31;
-// const X_MASK: usize = (1 << WIDTH) - 1;
-// const OPEN: u8 = 46;
 const OPEN_CHAR: char = '.';
 const TREE: u8 = 35;
 const TREE_CHAR: char = '#';
@@ -106,8 +104,6 @@ pub fn run(args: &[&str]) -> Result<()> {
     let file_bytes = read_file_bytes(&args[0])?;
     let lines = split_bytes_lines(&file_bytes);
     let geology = Geology::from_lines(lines);
-
-    // println!("{}", geology);
 
     let slopes: [(usize, usize); 5] = [(1, 1), (3, 1), (5, 1), (7, 1), (1, 2)];
 
