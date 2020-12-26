@@ -12,7 +12,8 @@ arrayvec = "0.5.2"
 ascii = "1.0.0"
 either = "1.6.1"
 fixedbitset = "0.3.1"
+ndarray = "0.14.0"
 petgraph = "0.5.1"
 regex = { version = "1.4.2", default-features = false, features = ["perf", "std"] }
 tinyset = { version = "0.4.4", default-features = false }
-ndarray = "0.14.0"
+num-complex = "0.3.1"

@@ -409,6 +409,7 @@ pub fn run(args: &[&str]) -> Result<()> {
 #[cfg(test)]
 mod test {
     use super::*;
+    use petgraph::visit::EdgeRef;
 
     // Test on a small sample program
     #[test]
