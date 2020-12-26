@@ -15,3 +15,4 @@ fixedbitset = "0.3.1"
 petgraph = "0.5.1"
 regex = { version = "1.4.2", default-features = false, features = ["perf", "std"] }
 tinyset = { version = "0.4.4", default-features = false }
+ndarray = "0.14.0"

@@ -49,6 +49,7 @@ macro_rules! time {
 
 mod day1;
 mod day10;
+mod day11;
 mod day2;
 mod day3;
 mod day4;
@@ -79,6 +80,7 @@ fn main() -> Result<()> {
             "day8" => day8::run(rest),
             "day9" => day9::run(rest),
             "day10" => day10::run(rest),
+            "day11" => day11::run(rest),
             _ => Err(anyhow!("unrecognized command: '{}'", command)),
         }
     })
