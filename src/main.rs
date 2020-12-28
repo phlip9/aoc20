@@ -51,6 +51,7 @@ mod day1;
 mod day10;
 mod day11;
 mod day12;
+mod day13;
 mod day2;
 mod day3;
 mod day4;
@@ -83,6 +84,7 @@ fn main() -> Result<()> {
             "day10" => day10::run(rest),
             "day11" => day11::run(rest),
             "day12" => day12::run(rest),
+            "day13" => day13::run(rest),
             _ => Err(anyhow!("unrecognized command: '{}'", command)),
         }
     })

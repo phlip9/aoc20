@@ -1,6 +1,6 @@
 use anyhow::{Context, Result};
 use num_complex::Complex;
-use std::{fmt, fs};
+use std::fs;
 
 const NORTH: Complex<i16> = Complex::new(0, 1);
 const SOUTH: Complex<i16> = Complex::new(0, -1);
