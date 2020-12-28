@@ -2,7 +2,7 @@ use anyhow::{Context, Result};
 use std::{fs, iter};
 
 fn diffs_distribution(adapters: &[u8]) -> [u8; 3] {
-    let mut distr = [0u8; 3];
+    let mut distr = [0_u8; 3];
     let diffs = adapters.windows(2).map(|slice| slice[1] - slice[0]);
     for diff in diffs {
         distr[(diff - 1) as usize] += 1;
@@ -24,7 +24,7 @@ fn diffs_distribution(adapters: &[u8]) -> [u8; 3] {
 #[allow(clippy::needless_range_loop)]
 fn count_paths(adapters: &[u8]) -> u64 {
     let n = adapters.len();
-    let mut paths = vec![0u64; n];
+    let mut paths = vec![0_u64; n];
     paths[n - 1] = 1;
 
     for i in (0..n - 1).rev() {

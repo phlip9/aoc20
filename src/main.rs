@@ -1,3 +1,12 @@
+#![allow(clippy::cast_lossless)]
+#![allow(clippy::cast_possible_truncation)]
+#![allow(clippy::cast_possible_wrap)]
+#![allow(clippy::cast_sign_loss)]
+#![allow(clippy::enum_glob_use)]
+#![allow(clippy::shadow_unrelated)]
+#![allow(clippy::must_use_candidate)]
+#![allow(clippy::similar_names)]
+
 use anyhow::{anyhow, Result};
 use std::{env, time::Instant};
 
@@ -67,8 +76,8 @@ fn main() -> Result<()> {
     let args = env::args().into_iter().skip(1).collect::<Vec<_>>();
     println!("{:?}", args);
 
-    let (command, rest) = args.split_first().expect("no command");
-    let rest_vec = rest.iter().map(String::as_str).collect::<Vec<_>>();
+    let (command, rest_slice) = args.split_first().expect("no command");
+    let rest_vec = rest_slice.iter().map(String::as_str).collect::<Vec<_>>();
     let rest = rest_vec.as_slice();
 
     time!("command", {

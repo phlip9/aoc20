@@ -21,8 +21,8 @@ impl<'a> PasswordEntry<'a> {
     fn is_valid_v2(&self) -> bool {
         let i1 = (self.min_reps - 1) as usize;
         let i2 = (self.max_reps - 1) as usize;
-        let c1 = &self.password[i1..i1 + 1];
-        let c2 = &self.password[i2..i2 + 1];
+        let c1 = &self.password[i1..=i1];
+        let c2 = &self.password[i2..=i2];
         let l = self.letter;
 
         (c1 == l) ^ (c2 == l)
@@ -30,7 +30,7 @@ impl<'a> PasswordEntry<'a> {
 }
 
 pub fn run(args: &[&str]) -> Result<()> {
-    let file_bytes = read_file_bytes(&args[0])?;
+    let file_bytes = read_file_bytes(args[0])?;
     let file_str = str::from_utf8(&file_bytes).context("File not valid utf8")?;
 
     let re = RegexBuilder::new(r"^([0-9]+)-([0-9]+) ([a-z]): ([a-z]+)$")
@@ -39,7 +39,7 @@ pub fn run(args: &[&str]) -> Result<()> {
         .build()
         .context("Failed to build regex")?;
 
-    let entries = re.captures_iter(&file_str).map(|caps| {
+    let entries = re.captures_iter(file_str).map(|caps| {
         let min_reps = caps.get(1).unwrap().as_str().parse::<u8>().unwrap();
         let max_reps = caps.get(2).unwrap().as_str().parse::<u8>().unwrap();
         let letter = caps.get(3).unwrap().as_str();

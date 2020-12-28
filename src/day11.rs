@@ -23,18 +23,15 @@ impl Layout {
     fn from_str(input: &str) -> Self {
         let mut n: usize = 0;
         let mut m: usize = 0;
-        let elem_iter = input
-            .lines()
-            .map(|line| {
-                n += 1;
-                m = line.len();
-                line.chars().map(|c| match c {
-                    'L' => 1,
-                    '.' => 0,
-                    _ => panic!("unexpected char: {}", c),
-                })
+        let elem_iter = input.lines().flat_map(|line| {
+            n += 1;
+            m = line.len();
+            line.chars().map(|c| match c {
+                'L' => 1,
+                '.' => 0,
+                _ => panic!("unexpected char: {}", c),
             })
-            .flatten();
+        });
         // include border of 0's
         let floor_mask = Array::from_iter(elem_iter).into_shape((n, m)).unwrap();
 
@@ -151,15 +148,15 @@ struct Layout2 {
 }
 
 impl Layout2 {
-    #[inline(always)]
-    fn conv_1d_to_2d(ncols: usize, idx_1d: usize) -> (usize, usize) {
+    #[inline]
+    const fn conv_1d_to_2d(ncols: usize, idx_1d: usize) -> (usize, usize) {
         let row_idx = idx_1d / ncols;
         let col_idx = idx_1d % ncols;
         (row_idx, col_idx)
     }
 
-    #[inline(always)]
-    fn conv_2d_to_1d(ncols: usize, row_idx: usize, col_idx: usize) -> usize {
+    #[inline]
+    const fn conv_2d_to_1d(ncols: usize, row_idx: usize, col_idx: usize) -> usize {
         row_idx * ncols + col_idx
     }
 
@@ -218,18 +215,15 @@ impl Layout2 {
     fn from_str(input: &str) -> Self {
         let mut nrows: usize = 0;
         let mut ncols: usize = 0;
-        let elem_iter = input
-            .lines()
-            .map(|line| {
-                nrows += 1;
-                ncols = line.len();
-                line.chars().map(|c| match c {
-                    'L' => true,
-                    '.' => false,
-                    _ => panic!("unexpected char: {}", c),
-                })
+        let elem_iter = input.lines().flat_map(|line| {
+            nrows += 1;
+            ncols = line.len();
+            line.chars().map(|c| match c {
+                'L' => true,
+                '.' => false,
+                _ => panic!("unexpected char: {}", c),
             })
-            .flatten();
+        });
 
         let chair_idxs = elem_iter.enumerate().filter_map(
             |(idx, is_chair)| {
@@ -309,7 +303,7 @@ impl fmt::Display for Layout2 {
 }
 
 fn part1(input: &str) {
-    let mut layout = Layout::from_str(&input);
+    let mut layout = Layout::from_str(input);
     let mut iter = 0;
     let mut hash = layout.hash();
 
@@ -330,7 +324,7 @@ fn part1(input: &str) {
 }
 
 fn part2(input: &str) {
-    let mut layout = Layout2::from_str(&input);
+    let mut layout = Layout2::from_str(input);
     let mut iter = 0;
     let mut hash = layout.hash();
 

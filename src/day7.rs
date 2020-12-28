@@ -79,23 +79,19 @@ impl<'a> Rules<'a> {
             .collect::<HashMap<_, _>>();
 
         let nodes = iter::repeat(Element::Node { weight: () }).take(num_bags);
-        let edges = raw_rules
-            .iter()
-            .enumerate()
-            .map(|(idx, rule)| {
-                let index_map = &index_map;
-                let bag_idx = idx as u16;
+        let edges = raw_rules.iter().enumerate().flat_map(|(idx, rule)| {
+            let index_map = &index_map;
+            let bag_idx = idx as u16;
 
-                rule.contains.iter().map(move |(num, contained_bag)| {
-                    let contained_bag_idx = index_map[contained_bag];
-                    Element::Edge {
-                        source: bag_idx as usize,
-                        target: contained_bag_idx as usize,
-                        weight: *num,
-                    }
-                })
+            rule.contains.iter().map(move |(num, contained_bag)| {
+                let contained_bag_idx = index_map[contained_bag];
+                Element::Edge {
+                    source: bag_idx as usize,
+                    target: contained_bag_idx as usize,
+                    weight: *num,
+                }
             })
-            .flatten();
+        });
         let elements = nodes.chain(edges);
         let graph = DiGraph::from_elements(elements);
 

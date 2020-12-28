@@ -1,3 +1,5 @@
+#![allow(clippy::enum_glob_use)]
+
 use anyhow::{anyhow, Context, Result};
 use std::{fs, iter::Iterator, str};
 
@@ -54,7 +56,7 @@ struct PassportV1<'a> {
 }
 
 impl<'a> PassportV1<'a> {
-    fn try_from_raw(raw: PassportRaw<'a>) -> Option<Self> {
+    fn try_from_raw(raw: &PassportRaw<'a>) -> Option<Self> {
         Some(PassportV1 {
             byr: raw.byr?,
             iyr: raw.iyr?,
@@ -139,23 +141,23 @@ struct PassportV2<'a> {
 }
 
 impl<'a> PassportV2<'a> {
-    fn try_from_v1(raw: PassportV1<'a>) -> Result<Self> {
-        let _byr = parse_num_range(&raw.byr, 1920, 2002).context("Invalid birth year")?;
-        let _iyr = parse_num_range(&raw.iyr, 2010, 2020).context("Invalid issue year")?;
-        let _eyr = parse_num_range(&raw.eyr, 2020, 2030).context("Invalid expiration")?;
-        let _hgt = Height::try_from_str(&raw.hgt).context("Invalid height")?;
-        let _hcl = parse_hair_color(&raw.hcl).ok_or_else(|| anyhow!("Invalid hair color"))?;
-        let _ecl = parse_eye_color(&raw.ecl).ok_or_else(|| anyhow!("Invalid eye color"))?;
-        let _pid = parse_passport_id(&raw.pid).ok_or_else(|| anyhow!("Invalid passport id"))?;
+    fn try_from_v1(raw: &PassportV1<'a>) -> Result<Self> {
+        let byr = parse_num_range(raw.byr, 1920, 2002).context("Invalid birth year")?;
+        let iyr = parse_num_range(raw.iyr, 2010, 2020).context("Invalid issue year")?;
+        let eyr = parse_num_range(raw.eyr, 2020, 2030).context("Invalid expiration")?;
+        let hgt = Height::try_from_str(raw.hgt).context("Invalid height")?;
+        let hcl = parse_hair_color(raw.hcl).ok_or_else(|| anyhow!("Invalid hair color"))?;
+        let ecl = parse_eye_color(raw.ecl).ok_or_else(|| anyhow!("Invalid eye color"))?;
+        let pid = parse_passport_id(raw.pid).ok_or_else(|| anyhow!("Invalid passport id"))?;
 
         Ok(Self {
-            _byr,
-            _iyr,
-            _eyr,
-            _hgt,
-            _hcl,
-            _ecl,
-            _pid,
+            _byr: byr,
+            _iyr: iyr,
+            _eyr: eyr,
+            _hgt: hgt,
+            _hcl: hcl,
+            _ecl: ecl,
+            _pid: pid,
         })
     }
 }
@@ -168,10 +170,10 @@ pub fn run(args: &[&str]) -> Result<()> {
     for passport_str in input.split("\n\n") {
         let passport_raw =
             PassportRaw::try_from_str(passport_str).context("Failed to parse passport")?;
-        let passport_v1 = PassportV1::try_from_raw(passport_raw);
+        let passport_v1 = PassportV1::try_from_raw(&passport_raw);
         if let Some(passport_v1) = passport_v1 {
             valid_count_v1 += 1;
-            valid_count_v2 += PassportV2::try_from_v1(passport_v1).is_ok() as u32;
+            valid_count_v2 += PassportV2::try_from_v1(&passport_v1).is_ok() as u32;
         }
     }
 

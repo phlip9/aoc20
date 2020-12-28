@@ -26,39 +26,42 @@ enum Instr {
 
 impl Instr {
     fn from_str(s: &str) -> Self {
+        use Instr::*;
         let (instr, val) = s.split_at(3);
         let val = val[1..].parse::<i16>().expect("Invalid value");
         match instr {
-            "acc" => Instr::Acc(val),
-            "jmp" => Instr::Jmp(val),
-            "nop" => Instr::Nop(val),
+            "acc" => Acc(val),
+            "jmp" => Jmp(val),
+            "nop" => Nop(val),
             _ => panic!("Invalid instruction"),
         }
     }
 
-    fn is_jmp(&self) -> bool {
-        matches!(self, Instr::Jmp(_))
+    const fn is_jmp(&self) -> bool {
+        matches!(self, Self::Jmp(_))
     }
 
-    fn is_nop(&self) -> bool {
-        matches!(self, Instr::Nop(_))
+    const fn is_nop(&self) -> bool {
+        matches!(self, Self::Nop(_))
     }
 
     fn repair(&mut self) {
+        use Instr::*;
         match self {
-            Instr::Jmp(off) => *self = Instr::Nop(*off),
-            Instr::Nop(off) => *self = Instr::Jmp(*off),
-            Instr::Acc(_) => panic!("Can't repair acc instruction"),
+            Jmp(off) => *self = Nop(*off),
+            Nop(off) => *self = Jmp(*off),
+            Acc(_) => panic!("Can't repair acc instruction"),
         }
     }
 }
 
 impl fmt::Display for Instr {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        use Instr::*;
         let (instr, val) = match self {
-            Instr::Acc(val) => ("acc", val),
-            Instr::Jmp(val) => ("jmp", val),
-            Instr::Nop(val) => ("nop", val),
+            Acc(val) => ("acc", val),
+            Jmp(val) => ("jmp", val),
+            Nop(val) => ("nop", val),
         };
         write!(f, "{} {:+}", instr, val)
     }
@@ -175,8 +178,7 @@ fn basic_block_map(basic_blocks: &[BasicBlock]) -> impl Iterator<Item = usize> +
     basic_blocks
         .iter()
         .enumerate()
-        .map(|(idx, basic_block)| iter::repeat(idx).take(basic_block.len()))
-        .flatten()
+        .flat_map(|(idx, basic_block)| iter::repeat(idx).take(basic_block.len()))
 }
 
 // Build the graph of basic blocks with directed edges connecting them. There are
@@ -193,7 +195,7 @@ fn basic_block_graph(
     let edges = basic_blocks
         .iter()
         .enumerate()
-        .map(|(basic_block_idx, basic_block)| {
+        .flat_map(|(basic_block_idx, basic_block)| {
             let leader_idx = basic_block.start;
             let end_idx = basic_block.end - 1;
 
@@ -229,8 +231,7 @@ fn basic_block_graph(
             };
 
             fallthrough_iter.chain(jmp_iter)
-        })
-        .flatten();
+        });
     let elements = nodes.chain(edges);
     BasicBlockGraph::from_elements(elements)
 }
@@ -322,23 +323,20 @@ fn find_repair(instrs: &[Instr]) -> Option<usize> {
     // We only need to check adding edges since removing edges can never improve
     // connectivity from source -> terminal.
 
-    let source_blocks_and_instrs = source_connectivity
-        .ones()
-        .map(|block_idx| {
-            let block = &basic_blocks[block_idx];
-            let leader_idx = block.start;
-            let end_idx = block.end - 1;
+    let source_blocks_and_instrs = source_connectivity.ones().flat_map(|block_idx| {
+        let block = &basic_blocks[block_idx];
+        let leader_idx = block.start;
+        let end_idx = block.end - 1;
 
-            let mut instr_idxs = ArrayVec::<[(usize, usize); 2]>::new();
-            instr_idxs.push((block_idx, leader_idx));
+        let mut instr_idxs = ArrayVec::<[(usize, usize); 2]>::new();
+        instr_idxs.push((block_idx, leader_idx));
 
-            if leader_idx != end_idx {
-                instr_idxs.push((block_idx, end_idx));
-            }
+        if leader_idx != end_idx {
+            instr_idxs.push((block_idx, end_idx));
+        }
 
-            instr_idxs
-        })
-        .flatten();
+        instr_idxs
+    });
 
     for (block_idx, instr_idx) in source_blocks_and_instrs {
         match &instrs[instr_idx] {

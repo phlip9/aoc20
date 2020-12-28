@@ -12,7 +12,7 @@ struct Position(u16);
 
 impl Position {
     fn from_str(s: &str) -> Self {
-        let mut pos = 0u16;
+        let mut pos = 0_u16;
         for (idx, c) in s.chars().enumerate().take(POSITION_LEN) {
             let idx = POSITION_LEN - idx - 1;
             let bit = match c {
@@ -24,15 +24,15 @@ impl Position {
         Self(pos)
     }
 
-    fn row(self) -> u16 {
+    const fn row(self) -> u16 {
         (self.0 & ROW_MASK) >> COL_LEN
     }
 
-    fn col(self) -> u16 {
+    const fn col(self) -> u16 {
         self.0 & COL_MASK
     }
 
-    fn seat_id(self) -> u16 {
+    const fn seat_id(self) -> u16 {
         self.row() * 8 + self.col()
     }
 }

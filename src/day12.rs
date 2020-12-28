@@ -54,7 +54,7 @@ struct Ship {
 }
 
 impl Ship {
-    fn new() -> Self {
+    const fn new() -> Self {
         Self {
             position: Complex::new(0, 0),
             heading: EAST,

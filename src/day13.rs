@@ -124,8 +124,12 @@ fn part2(input: &str) {
     let (a, n): (Vec<i64>, Vec<i64>) = line
         .split(',')
         .enumerate()
-        .filter_map(|(i, n_i_str)| n_i_str.parse::<i64>().ok().map(|n_i| (i as i64, n_i)))
-        .map(|(i, n_i)| ((n_i - i).rem_euclid(n_i), n_i))
+        .filter_map(|(i, n_i_str)| {
+            n_i_str
+                .parse::<i64>()
+                .ok()
+                .map(|n_i| ((n_i - (i as i64)).rem_euclid(n_i), n_i))
+        })
         .unzip();
 
     let x = chinese_remainder_theorem(&a, &n).unwrap();

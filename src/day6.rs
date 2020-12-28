@@ -17,7 +17,7 @@ impl ResponseSet {
             let idx = byte - A_LOWER_ASCII;
             bits |= 1 << idx;
         }
-        ResponseSet(bits)
+        Self(bits)
     }
 
     const fn none() -> Self {
@@ -28,15 +28,15 @@ impl ResponseSet {
         Self(RESPONSE_MASK)
     }
 
-    fn union(self, other: Self) -> Self {
+    const fn union(self, other: Self) -> Self {
         Self(self.0 | other.0)
     }
 
-    fn intersect(self, other: Self) -> Self {
+    const fn intersect(self, other: Self) -> Self {
         Self(self.0 & other.0)
     }
 
-    fn count_yes(self) -> u32 {
+    const fn count_yes(self) -> u32 {
         self.0.count_ones()
     }
 }
@@ -53,10 +53,13 @@ pub fn run(args: &[&str]) -> Result<()> {
     let input = fs::read_to_string(args[0]).context("Failed to read file")?;
 
     let groups = input.split("\n\n").map(|group_str| {
-        group_str
-            .split('\n')
-            .filter(|line| !line.is_empty())
-            .map(|line| ResponseSet::from_bytes(line.as_bytes()))
+        group_str.split('\n').filter_map(|line| {
+            if line.is_empty() {
+                None
+            } else {
+                Some(ResponseSet::from_bytes(line.as_bytes()))
+            }
+        })
     });
 
     let mut union_yes_counts: u32 = 0;

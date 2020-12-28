@@ -20,12 +20,13 @@ enum Action {
 }
 
 impl Action {
-    fn parse(s: &str) -> IResult<&str, Action> {
+    fn parse(s: &str) -> IResult<&str, Self> {
         alt((parse_set_mask, parse_set_mem))(s)
     }
 }
 
 impl fmt::Display for Action {
+    #[allow(clippy::if_not_else)]
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         use Action::*;
         match self {

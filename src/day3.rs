@@ -22,12 +22,12 @@ impl Horizontal {
         Self { trees }
     }
 
-    fn is_tree_inner(&self, x: u8) -> bool {
+    const fn is_tree_inner(&self, x: u8) -> bool {
         let mask = 1 << x;
         self.trees & mask != 0
     }
 
-    fn is_tree(&self, x: usize) -> bool {
+    const fn is_tree(&self, x: usize) -> bool {
         self.is_tree_inner((x % WIDTH) as u8)
     }
 }
@@ -96,7 +96,7 @@ impl fmt::Display for Geology {
 }
 
 pub fn run(args: &[&str]) -> Result<()> {
-    let file_bytes = read_file_bytes(&args[0])?;
+    let file_bytes = read_file_bytes(args[0])?;
     let lines = split_bytes_lines(&file_bytes);
     let geology = Geology::from_lines(lines);
 
