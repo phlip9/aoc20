@@ -1,3 +1,5 @@
+#![allow(clippy::reversed_empty_ranges)]
+
 use anyhow::{Context, Result};
 use arrayvec::ArrayVec;
 use fixedbitset::FixedBitSet;
@@ -109,12 +111,10 @@ impl fmt::Display for Layout {
         azip!((index (i, j), &occupied in &occupied_view, &mask in &self.floor_mask) {
             if mask == 0 {
                 str_buf.push('.');
+            } else if occupied == 1 {
+                str_buf.push('#');
             } else {
-                if occupied == 1 {
-                    str_buf.push('#');
-                } else {
-                    str_buf.push('L');
-                }
+                str_buf.push('L');
             }
 
             if j == ncols - 1 {
@@ -295,12 +295,10 @@ impl fmt::Display for Layout2 {
                 let idx = Self::conv_2d_to_1d(self.ncols, row_idx, col_idx);
                 if !self.floor_mask.contains(idx) {
                     str_buf.push('.');
+                } else if self.occupied.contains(idx) {
+                    str_buf.push('#');
                 } else {
-                    if self.occupied.contains(idx) {
-                        str_buf.push('#');
-                    } else {
-                        str_buf.push('L');
-                    }
+                    str_buf.push('L');
                 }
             }
             str_buf.push('\n');

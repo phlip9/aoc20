@@ -12,8 +12,7 @@ pub fn run(args: &[&str]) -> Result<()> {
 
     let nums = split_bytes_lines(&file_bytes).map(|piece| {
         let s = str::from_utf8(piece).expect("invalid utf8");
-        let num = s.parse::<u32>().expect("invalid number");
-        num
+        s.parse::<u32>().expect("invalid number")
     });
     for num in nums {
         inputs.insert(num);

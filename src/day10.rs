@@ -21,6 +21,7 @@ fn diffs_distribution(adapters: &[u8]) -> [u8; 3] {
 // paths_i = sum_{j : (i, j) in E} paths_j
 // paths_0 == # unique valid adapter arrangements
 
+#[allow(clippy::needless_range_loop)]
 fn count_paths(adapters: &[u8]) -> u64 {
     let n = adapters.len();
     let mut paths = vec![0u64; n];
@@ -59,7 +60,7 @@ pub fn run(args: &[&str]) -> Result<()> {
     // Part 1
     let diffs_distr = diffs_distribution(&adapters);
     dbg!(diffs_distr);
-    dbg!(diffs_distr[1 - 1] as usize * diffs_distr[3 - 1] as usize);
+    dbg!(diffs_distr[0] as usize * diffs_distr[2] as usize);
 
     // Part 2
     dbg!(count_paths(&adapters));

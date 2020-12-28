@@ -2,6 +2,7 @@ use anyhow::{Context, Result};
 use std::fs;
 
 // find x, y, d in ℤ : a x + b y = d, d = gcd(a, b)
+#[allow(clippy::many_single_char_names)]
 fn egcd(a: i64, b: i64) -> (i64, i64, i64) {
     let (mut r_p, mut r) = (a, b);
     let (mut s_p, mut s) = (1, 0);
@@ -9,12 +10,15 @@ fn egcd(a: i64, b: i64) -> (i64, i64, i64) {
 
     while r != 0 {
         let q = r_p / r;
+
         let r_t = r_p - q * r;
         r_p = r;
         r = r_t;
+
         let s_t = s_p - q * s;
         s_p = s;
         s = s_t;
+
         let t_t = t_p - q * t;
         t_p = t;
         t = t_t;
@@ -115,7 +119,7 @@ fn part1(input: &str) {
 // 7, 13, 59, 31, 19 are coprime
 // ==> find x using the Chinese Remainder Theorem : )
 fn part2(input: &str) {
-    let line = input.lines().skip(1).next().unwrap();
+    let line = input.lines().nth(1).unwrap();
 
     let (a, n): (Vec<i64>, Vec<i64>) = line
         .split(',')

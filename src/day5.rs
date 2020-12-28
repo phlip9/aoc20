@@ -35,8 +35,10 @@ impl Position {
     fn seat_id(self) -> u16 {
         self.row() * 8 + self.col()
     }
+}
 
-    fn to_string(self) -> String {
+impl fmt::Display for Position {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         let row = self.row();
         let col = self.col();
 
@@ -52,13 +54,8 @@ impl Position {
             let c = if bit == 1 { 'R' } else { 'L' };
             line.push(c);
         }
-        line
-    }
-}
 
-impl fmt::Display for Position {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        f.write_str(&Position::to_string(*self))
+        f.write_str(&line)
     }
 }
 
@@ -89,10 +86,7 @@ pub fn run(args: &[&str]) -> Result<()> {
 
     let my_id = seat_ids
         .windows(2)
-        .find(|ids| match ids {
-            [id1, id2] if *id1 != id2 - 1 => true,
-            _ => false,
-        })
+        .find(|ids| matches!(ids, [id1, id2] if *id1 != id2 - 1))
         .and_then(<[_]>::first)
         .map(|prev_id| prev_id + 1)
         .ok_or_else(|| anyhow!("Failed to find my seat id"))?;

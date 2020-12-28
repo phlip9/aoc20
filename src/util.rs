@@ -13,7 +13,7 @@ pub fn read_file_bytes(path: &str) -> Result<Vec<u8>> {
     Ok(buf)
 }
 
-pub fn split_bytes_lines<'a>(bytes: &'a [u8]) -> impl Iterator<Item = &'a [u8]> {
+pub fn split_bytes_lines(bytes: &[u8]) -> impl Iterator<Item = &[u8]> {
     bytes
         .split(|byte| *byte == NEWLINE)
         .take_while(|piece| !piece.is_empty())

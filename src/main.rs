@@ -67,7 +67,7 @@ fn main() -> Result<()> {
     println!("{:?}", args);
 
     let (command, rest) = args.split_first().expect("no command");
-    let rest_vec = rest.into_iter().map(String::as_str).collect::<Vec<_>>();
+    let rest_vec = rest.iter().map(String::as_str).collect::<Vec<_>>();
     let rest = rest_vec.as_slice();
 
     time!("command", {

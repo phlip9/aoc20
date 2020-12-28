@@ -37,19 +37,11 @@ impl Instr {
     }
 
     fn is_jmp(&self) -> bool {
-        if let Instr::Jmp(_) = self {
-            true
-        } else {
-            false
-        }
+        matches!(self, Instr::Jmp(_))
     }
 
     fn is_nop(&self) -> bool {
-        if let Instr::Nop(_) = self {
-            true
-        } else {
-            false
-        }
+        matches!(self, Instr::Nop(_))
     }
 
     fn repair(&mut self) {
@@ -240,9 +232,7 @@ fn basic_block_graph(
         })
         .flatten();
     let elements = nodes.chain(edges);
-    let graph = BasicBlockGraph::from_elements(elements);
-
-    graph
+    BasicBlockGraph::from_elements(elements)
 }
 
 // Determine which basic blocks are connected to the source (first basic block

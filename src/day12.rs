@@ -86,7 +86,7 @@ impl Ship2 {
     fn new() -> Self {
         Self {
             position: Complex::new(0, 0),
-            waypoint: 10 * EAST + 1 * NORTH,
+            waypoint: 10 * EAST + NORTH,
         }
     }
 

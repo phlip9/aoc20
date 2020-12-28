@@ -30,8 +30,10 @@ impl Horizontal {
     fn is_tree(&self, x: usize) -> bool {
         self.is_tree_inner((x % WIDTH) as u8)
     }
+}
 
-    fn to_string(&self) -> String {
+impl fmt::Display for Horizontal {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         let mut line = String::with_capacity(WIDTH);
         for x in 0..WIDTH as u8 {
             if self.is_tree_inner(x) {
@@ -40,13 +42,6 @@ impl Horizontal {
                 line.push(OPEN_CHAR);
             }
         }
-        line
-    }
-}
-
-impl fmt::Display for Horizontal {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        let line = self.to_string();
         f.write_str(&line)
     }
 }
