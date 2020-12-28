@@ -43,8 +43,6 @@ fn count_paths(adapters: &[u8]) -> u64 {
         }
 
         paths[i] = paths_i;
-
-        println!("paths[{}] = {}", i, paths_i);
     }
 
     paths[0]
