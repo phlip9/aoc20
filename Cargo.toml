@@ -21,3 +21,5 @@ tinyset = { version = "0.4.4", default-features = false }
 
 [profile.release]
 panic = "abort"
+opt-level = 3
+lto = "thin"
