@@ -1,9 +1,12 @@
-use anyhow::{anyhow, Context, Result};
-use ndarray::{azip, s, Array, Array2, Array3, Array4, Slice};
+#![allow(clippy::reversed_empty_ranges)]
+
+use anyhow::{Context, Result};
+use ndarray::{s, Array, Array2, Array3, Array4, Slice};
 use std::{fs, iter::FromIterator};
 
 const BORDER_SIZE: usize = 1;
 const MAX_ITERS: usize = 6;
+const I: isize = BORDER_SIZE as isize + MAX_ITERS as isize;
 
 fn parse_input(input: &str) -> Array2<u8> {
     let mut x_len: usize = 0;
@@ -40,7 +43,6 @@ impl Cubes {
         let mut active = Array3::zeros((z_len, x_len, y_len));
         let scratch = Array3::zeros((z_len - 2, x_len - 2, y_len - 2));
 
-        const I: isize = BORDER_SIZE as isize + MAX_ITERS as isize;
         active.slice_mut(s![z_len / 2, I..-I, I..-I]).assign(z0);
 
         Self { active, scratch }
@@ -96,10 +98,9 @@ impl Cubes2 {
         let mut active = Array4::zeros((w_len, z_len, x_len, y_len));
         let scratch = Array4::zeros((w_len - 2, z_len - 2, x_len - 2, y_len - 2));
 
-        const I: isize = BORDER_SIZE as isize + MAX_ITERS as isize;
         active
             .slice_mut(s![w_len / 2, z_len / 2, I..-I, I..-I])
-            .assign(&w0z0);
+            .assign(w0z0);
 
         Self { active, scratch }
     }
