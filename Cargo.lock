@@ -24,6 +24,7 @@ dependencies = [
  "ascii",
  "either",
  "fixedbitset 0.3.1",
+ "itertools 0.10.0",
  "ndarray",
  "nom",
  "num-complex",
@@ -119,6 +120,15 @@ name = "itertools"
 version = "0.9.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "284f18f85651fe11e8a991b2adb42cb078325c996ed026d994719efcfca1d54b"
+dependencies = [
+ "either",
+]
+
+[[package]]
+name = "itertools"
+version = "0.10.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "37d572918e350e82412fe766d24b15e6682fb2ed2bbe018280caa810397cb319"
 dependencies = [
  "either",
 ]
@@ -283,7 +293,7 @@ version = "0.4.4"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "784f540960a63144d63992caf430ed87e39d920f2c474cb8ac586ff31fb861fc"
 dependencies = [
- "itertools",
+ "itertools 0.9.0",
 ]
 
 [[package]]
